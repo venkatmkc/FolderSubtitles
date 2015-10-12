@@ -1,0 +1,8 @@
+*.iml
+*.iws
+build
+out
+.idea
+.DS_Store
+lib
+*.properties
