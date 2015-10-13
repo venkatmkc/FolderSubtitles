@@ -2,10 +2,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 
-import javax.jws.soap.SOAPBinding;
+import java.io.IOException;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 public class FolderSubtitlesTest {
     @Mock
@@ -14,19 +13,22 @@ public class FolderSubtitlesTest {
     @Mock
     User user;
 
+    @Mock
+    TokenRequester tokenRequester;
+
     private FolderSubtitles folderSubtitles;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        folderSubtitles = new FolderSubtitles(requestConstructor, user);
+        folderSubtitles = new FolderSubtitles(requestConstructor, tokenRequester, user);
     }
 
     @Test
-    public void userShouldBeAbleToLogin() {
+    public void userShouldBeAbleToLogin() throws IOException {
         folderSubtitles.start();
 
-        verify(user).login(requestConstructor);
+        verify(user).login(requestConstructor, tokenRequester);
     }
 
 }

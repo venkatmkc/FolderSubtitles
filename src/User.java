@@ -1,3 +1,9 @@
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class User {
 
     private ConsoleInputOutput consoleInputOutput;
@@ -26,11 +32,15 @@ public class User {
         password = consoleInputOutput.getInputFromUser();
     }
 
-    public void login(RequestConstructor requestConstructor) {
+    public void login(RequestConstructor requestConstructor, TokenRequester tokenRequester) throws IOException {
         promptUsername();
         getUsernameFromUser();
         promptPassword();
         getPasswordFromUser();
-        requestConstructor.loginRequestMessage(username, password, userAgent);
+        String requestMessage = requestConstructor.loginRequestMessage(username, password, userAgent);
+        String tokenResponse = tokenRequester.loginToken(requestMessage);
+        System.out.println(tokenResponse);
     }
+
+
 }

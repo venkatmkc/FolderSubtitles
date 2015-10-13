@@ -1,10 +1,10 @@
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.times;
+import java.io.IOException;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,6 +15,9 @@ public class UserTest{
     @Mock
     RequestConstructor requestConstructor;
 
+    @Mock
+    TokenRequester tokenRequester;
+
     private User user;
 
     @Before
@@ -22,6 +25,7 @@ public class UserTest{
         MockitoAnnotations.initMocks(this);
         user = new User(consoleInputOutput);
         when(consoleInputOutput.getInputFromUser()).thenReturn("username", "password");
+        when(requestConstructor.loginRequestMessage("username", "password", "OSTestUserAgent")).thenReturn("request");
     }
 
     @Test
@@ -53,9 +57,16 @@ public class UserTest{
     }
 
     @Test
-    public void RequestMessageShouldBeObtained() {
-        user.login(requestConstructor);
+    public void requestMessageShouldBeObtained() throws IOException {
+        user.login(requestConstructor, tokenRequester);
 
         verify(requestConstructor).loginRequestMessage("username", "password", "OSTestUserAgent");
+    }
+
+    @Test
+    public void requestShouldBeSentToObtainUserToken() throws IOException {
+        user.login(requestConstructor, tokenRequester);
+
+        verify(tokenRequester).loginToken("request");
     }
 }
