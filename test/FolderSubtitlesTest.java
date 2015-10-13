@@ -2,22 +2,31 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 
+import javax.jws.soap.SOAPBinding;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+
 public class FolderSubtitlesTest {
     @Mock
-    ConsoleInputOutput consoleInputOutput;
+    RequestConstructor requestConstructor;
+
+    @Mock
+    User user;
+
+    private FolderSubtitles folderSubtitles;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        folderSubtitles = new FolderSubtitles(requestConstructor, user);
     }
 
     @Test
-    public void usernameShouldBePromptedFromTheUser() {
-        FolderSubtitles folderSubtitles = new FolderSubtitles(consoleInputOutput);
-
+    public void userShouldBeAbleToLogin() {
         folderSubtitles.start();
 
-        Mockito.verify(consoleInputOutput).printMessage("Username : ");
+        verify(user).login(requestConstructor);
     }
 
 }

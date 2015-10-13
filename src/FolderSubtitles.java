@@ -1,17 +1,16 @@
 import java.util.Scanner;
 
-/**
- * Created by venkatmk on 12/10/15.
- */
 public class FolderSubtitles {
+    private RequestConstructor requestConstructor;
+    private User user;
 
-    private ConsoleInputOutput consoleInputOutput;
 
-    public FolderSubtitles(ConsoleInputOutput consoleInputOutput) {
-        this.consoleInputOutput = consoleInputOutput;
+    public FolderSubtitles(RequestConstructor requestConstructor, User user) {
+        this.requestConstructor = requestConstructor;
+        this.user = user;
     }
 
     public void start() {
-        consoleInputOutput.printMessage("Username : ");
+        user.login(requestConstructor);
     }
 }

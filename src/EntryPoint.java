@@ -4,7 +4,9 @@
 public class EntryPoint {
     public static void main(String[] args) {
         ConsoleInputOutput consoleInputOutput = new ConsoleInputOutput();
-        FolderSubtitles folderSubtitles = new FolderSubtitles(consoleInputOutput);
+        RequestConstructor requestConstructor = new RequestConstructor();
+        User user = new User(consoleInputOutput);
+        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, user);
         folderSubtitles.start();
     }
 }
