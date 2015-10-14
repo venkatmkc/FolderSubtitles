@@ -12,9 +12,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 
-/**
- * Created by venkatmk on 13/10/15.
- */
 public class TokenRequesterTest {
     @Mock
     HttpGatewayApi httpGatewayApi;
@@ -33,11 +30,4 @@ public class TokenRequesterTest {
 
         Mockito.verify(httpGatewayApi).startConnection("http://api.opensubtitles.org/xml-rpc");
     }
-//
-//    @Test
-//    public void requestShouldBeSentToTheServer() throws IOException {
-//        tokenRequester.loginToken("hello");
-//
-//        Mockito.verify(httpGatewayApi).sendRequestToServer(Matchers.a, "hello");
-//    }
 }

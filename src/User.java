@@ -1,3 +1,6 @@
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -16,31 +19,23 @@ public class User {
         this.consoleInputOutput = consoleInputOutput;
     }
 
-    public void promptUsername() {
-        consoleInputOutput.printMessage("Username : ");
-    }
-
     public void getUsernameFromUser() {
         username = consoleInputOutput.getInputFromUser();
     }
 
-    public void promptPassword() {
-        consoleInputOutput.printMessage("Password : ");
-    }
 
     public void getPasswordFromUser() {
         password = consoleInputOutput.getInputFromUser();
     }
 
-    public void login(RequestConstructor requestConstructor, TokenRequester tokenRequester) throws IOException {
-        promptUsername();
+    public String login(RequestConstructor requestConstructor, TokenRequester tokenRequester, TokenParser tokenParser) throws IOException, ParserConfigurationException, SAXException {
+        consoleInputOutput.printMessage(Messages.USERNAME_PROMPT);
         getUsernameFromUser();
-        promptPassword();
+        consoleInputOutput.printMessage(Messages.PASSWORD_PROMPT);
         getPasswordFromUser();
         String requestMessage = requestConstructor.loginRequestMessage(username, password, userAgent);
         String tokenResponse = tokenRequester.loginToken(requestMessage);
-        System.out.println(tokenResponse);
+        String loginToken = tokenParser.parseLoginTokenResponse(tokenResponse);
+        return loginToken;
     }
-
-
 }

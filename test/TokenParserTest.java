@@ -11,11 +11,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by venkatmk on 13/10/15.
  */
-public class LoginTokenParserTest {
+public class TokenParserTest {
     @Test
     public void tokenResponseShouldBeParsedToToken() throws IOException, SAXException, ParserConfigurationException {
-        LoginTokenParser loginTokenParser = new LoginTokenParser();
-        String response = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+        TokenParser tokenParser = new TokenParser();
+        String response = "null<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                 "<methodResponse>\n" +
                 "<params>\n" +
                 " <param>\n" +
@@ -45,7 +45,7 @@ public class LoginTokenParserTest {
                 "</params>\n" +
                 "</methodResponse>";
 
-        String loginToken = loginTokenParser.parseLoginTokenResponse(response);
+        String loginToken = tokenParser.parseLoginTokenResponse(response);
 
         assertThat(loginToken, is(equalTo("ijrjtrcf7qof0u168t0pii0bg6")));
     }

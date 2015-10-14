@@ -2,13 +2,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserTest{
+
+
     @Mock
     ConsoleInputOutput consoleInputOutput;
 
@@ -18,6 +25,9 @@ public class UserTest{
     @Mock
     TokenRequester tokenRequester;
 
+    @Mock
+    TokenParser tokenParser;
+
     private User user;
 
     @Before
@@ -26,13 +36,15 @@ public class UserTest{
         user = new User(consoleInputOutput);
         when(consoleInputOutput.getInputFromUser()).thenReturn("username", "password");
         when(requestConstructor.loginRequestMessage("username", "password", "OSTestUserAgent")).thenReturn("request");
+        when(tokenRequester.loginToken("request")).thenReturn("response");
+        when(tokenParser.parseLoginTokenResponse("response")).thenReturn("loginToken");
     }
 
     @Test
-    public void usernameShouldBePromptedFromTheUser() {
-        user.promptUsername();
+    public void usernameShouldBePromptedFromTheUser() throws ParserConfigurationException, SAXException, IOException {
+        user.login(requestConstructor, tokenRequester, tokenParser);
 
-        verify(consoleInputOutput).printMessage("Username : ");
+        verify(consoleInputOutput).printMessage(Messages.USERNAME_PROMPT);
     }
 
     @Test
@@ -43,10 +55,10 @@ public class UserTest{
     }
 
     @Test
-    public void passwordShouldBePromptedFromTheUser() {
-        user.promptPassword();
+    public void passwordShouldBePromptedFromTheUser() throws ParserConfigurationException, SAXException, IOException {
+        user.login(requestConstructor, tokenRequester, tokenParser);
 
-        verify(consoleInputOutput).printMessage("Password : ");
+        verify(consoleInputOutput).printMessage(Messages.PASSWORD_PROMPT);
     }
 
     @Test
@@ -57,16 +69,29 @@ public class UserTest{
     }
 
     @Test
-    public void requestMessageShouldBeObtained() throws IOException {
-        user.login(requestConstructor, tokenRequester);
+    public void requestMessageShouldBeObtained() throws IOException, ParserConfigurationException, SAXException {
+        user.login(requestConstructor, tokenRequester, tokenParser);
 
         verify(requestConstructor).loginRequestMessage("username", "password", "OSTestUserAgent");
     }
 
     @Test
-    public void requestShouldBeSentToObtainUserToken() throws IOException {
-        user.login(requestConstructor, tokenRequester);
+    public void requestShouldBeSentToObtainUserToken() throws IOException, ParserConfigurationException, SAXException {
+        user.login(requestConstructor, tokenRequester, tokenParser);
 
         verify(tokenRequester).loginToken("request");
+    }
+
+    @Test
+    public void xmlLoginTokenResponseShouldBeParsed() throws IOException, ParserConfigurationException, SAXException {
+        user.login(requestConstructor, tokenRequester, tokenParser);
+
+        verify(tokenParser).parseLoginTokenResponse("response");
+    }
+    @Test
+    public void loginShouldProduceLoginToken() throws ParserConfigurationException, SAXException, IOException {
+        String loginToken = user.login(requestConstructor, tokenRequester, tokenParser);
+
+        assertThat(loginToken, is(equalTo("loginToken")));
     }
 }
