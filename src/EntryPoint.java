@@ -8,11 +8,12 @@ public class EntryPoint {
         ConsoleInputOutput consoleInputOutput = new ConsoleInputOutput();
         RequestConstructor requestConstructor = new RequestConstructor();
         HttpGatewayApi httpGatewayApi = new HttpGatewayApi();
-        TokenRequester tokenRequester = new TokenRequester(httpGatewayApi);
+        Requester requester = new Requester(httpGatewayApi);
         User user = new User(consoleInputOutput);
         TokenParser tokenParser = new TokenParser();
         OpenSubtitleHasher openSubtitleHasher = new OpenSubtitleHasher();
-        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, tokenRequester, user, tokenParser, consoleInputOutput, openSubtitleHasher);
+        SubtitleSearcher subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requester, tokenParser);
+        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher);
         folderSubtitles.start();
     }
 }

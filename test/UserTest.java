@@ -23,7 +23,7 @@ public class UserTest{
     RequestConstructor requestConstructor;
 
     @Mock
-    TokenRequester tokenRequester;
+    Requester requester;
 
     @Mock
     TokenParser tokenParser;
@@ -36,13 +36,13 @@ public class UserTest{
         user = new User(consoleInputOutput);
         when(consoleInputOutput.getInputFromUser()).thenReturn("username", "password");
         when(requestConstructor.loginRequestMessage("username", "password", "OSTestUserAgent")).thenReturn("request");
-        when(tokenRequester.loginToken("request")).thenReturn("response");
-        when(tokenParser.parseLoginTokenResponse("response")).thenReturn("loginToken");
+        when(requester.request("request")).thenReturn("response");
+        when(tokenParser.parseLoginTokenResponse("response")).thenReturn("request");
     }
 
     @Test
     public void usernameShouldBePromptedFromTheUser() throws ParserConfigurationException, SAXException, IOException {
-        user.login(requestConstructor, tokenRequester, tokenParser);
+        user.login(requestConstructor, requester, tokenParser);
 
         verify(consoleInputOutput).printMessage(Messages.USERNAME_PROMPT);
     }
@@ -56,7 +56,7 @@ public class UserTest{
 
     @Test
     public void passwordShouldBePromptedFromTheUser() throws ParserConfigurationException, SAXException, IOException {
-        user.login(requestConstructor, tokenRequester, tokenParser);
+        user.login(requestConstructor, requester, tokenParser);
 
         verify(consoleInputOutput).printMessage(Messages.PASSWORD_PROMPT);
     }
@@ -70,28 +70,28 @@ public class UserTest{
 
     @Test
     public void requestMessageShouldBeObtained() throws IOException, ParserConfigurationException, SAXException {
-        user.login(requestConstructor, tokenRequester, tokenParser);
+        user.login(requestConstructor, requester, tokenParser);
 
         verify(requestConstructor).loginRequestMessage("username", "password", "OSTestUserAgent");
     }
 
     @Test
     public void requestShouldBeSentToObtainUserToken() throws IOException, ParserConfigurationException, SAXException {
-        user.login(requestConstructor, tokenRequester, tokenParser);
+        user.login(requestConstructor, requester, tokenParser);
 
-        verify(tokenRequester).loginToken("request");
+        verify(requester).request("request");
     }
 
     @Test
     public void xmlLoginTokenResponseShouldBeParsed() throws IOException, ParserConfigurationException, SAXException {
-        user.login(requestConstructor, tokenRequester, tokenParser);
+        user.login(requestConstructor, requester, tokenParser);
 
         verify(tokenParser).parseLoginTokenResponse("response");
     }
     @Test
     public void loginShouldProduceLoginToken() throws ParserConfigurationException, SAXException, IOException {
-        String loginToken = user.login(requestConstructor, tokenRequester, tokenParser);
+        String loginToken = user.login(requestConstructor, requester, tokenParser);
 
-        assertThat(loginToken, is(equalTo("loginToken")));
+        assertThat(loginToken, is(equalTo("request")));
     }
 }

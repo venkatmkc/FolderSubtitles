@@ -16,7 +16,7 @@ public class FolderSubtitlesTest {
     User user;
 
     @Mock
-    TokenRequester tokenRequester;
+    Requester requester;
 
     @Mock
     TokenParser tokenParser;
@@ -27,12 +27,15 @@ public class FolderSubtitlesTest {
     @Mock
     OpenSubtitleHasher openSubtitleHasher;
 
+    @Mock
+    SubtitleSearcher subtitleSearcher;
+
     private FolderSubtitles folderSubtitles;
 
     @Before
     public void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
-        folderSubtitles = new FolderSubtitles(requestConstructor, tokenRequester, user, tokenParser, consoleInputOutput, openSubtitleHasher);
+        folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher);
         when(consoleInputOutput.getInputFromUser()).thenReturn("file location");
         when(openSubtitleHasher.computeHash("file location")).thenReturn("computed hash");
     }
@@ -41,7 +44,7 @@ public class FolderSubtitlesTest {
     public void userShouldBeAbleToLogin() throws IOException, ParserConfigurationException, SAXException {
         folderSubtitles.start();
 
-        verify(user).login(requestConstructor, tokenRequester, tokenParser);
+        verify(user).login(requestConstructor, requester, tokenParser);
     }
 
     @Test
@@ -58,4 +61,10 @@ public class FolderSubtitlesTest {
         verify(consoleInputOutput).getInputFromUser();
     }
 
+    @Test
+    public void searchShouldBePerformedForTheFile() throws ParserConfigurationException, SAXException, IOException {
+        folderSubtitles.start();
+
+        verify(subtitleSearcher).search(anyString(), anyString());
+    }
 }
