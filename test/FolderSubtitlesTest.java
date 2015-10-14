@@ -58,10 +58,4 @@ public class FolderSubtitlesTest {
         verify(consoleInputOutput).getInputFromUser();
     }
 
-    @Test
-    public void fileHashShouldBeComputed() throws ParserConfigurationException, SAXException, IOException {
-        folderSubtitles.start();
-
-        verify(openSubtitleHasher).computeHash("file location");
-    }
 }

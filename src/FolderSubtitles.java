@@ -25,6 +25,5 @@ public class FolderSubtitles {
         String loginToken = user.login(requestConstructor, tokenRequester, tokenParser);
         consoleInputOutput.printMessage(Messages.FILE_LOCATION_PROMPT);
         String fileLocation = consoleInputOutput.getInputFromUser();
-        String fileHash = openSubtitleHasher.computeHash(fileLocation);
     }
 }

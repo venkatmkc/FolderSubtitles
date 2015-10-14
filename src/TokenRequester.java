@@ -1,9 +1,6 @@
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-/**
- * Created by venkatmk on 13/10/15.
- */
 public class TokenRequester {
     private HttpGatewayApi httpGatewayApi;
     private final String openOrgServerUrl = "http://api.opensubtitles.org/xml-rpc";

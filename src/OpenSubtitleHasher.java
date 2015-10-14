@@ -48,4 +48,9 @@ public class OpenSubtitleHasher {
 
         return hash;
     }
+
+    public long fileSize(String fileLocation) {
+        File file = new File(fileLocation);
+        return file.length();
+    }
 }

@@ -35,7 +35,6 @@ public class User {
         getPasswordFromUser();
         String requestMessage = requestConstructor.loginRequestMessage(username, password, userAgent);
         String tokenResponse = tokenRequester.loginToken(requestMessage);
-        String loginToken = tokenParser.parseLoginTokenResponse(tokenResponse);
-        return loginToken;
+        return tokenParser.parseLoginTokenResponse(tokenResponse);
     }
 }
