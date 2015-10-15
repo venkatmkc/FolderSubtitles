@@ -14,7 +14,8 @@ public class EntryPoint {
         OpenSubtitleHasher openSubtitleHasher = new OpenSubtitleHasher();
         SubtitleSearcher subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requester, tokenParser);
         HttpDownloader httpDownloader = new HttpDownloader();
-        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher, httpDownloader);
+        ZipChanger zipchanger = new ZipChanger();
+        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, subtitleSearcher, httpDownloader, zipchanger);
         folderSubtitles.start();
     }
 }

@@ -24,8 +24,6 @@ public class FolderSubtitlesTest {
     @Mock
     ConsoleInputOutput consoleInputOutput;
 
-    @Mock
-    OpenSubtitleHasher openSubtitleHasher;
 
     @Mock
     SubtitleSearcher subtitleSearcher;
@@ -33,14 +31,16 @@ public class FolderSubtitlesTest {
     @Mock
     HttpDownloader httpDownloader;
 
+    @Mock
+    ZipChanger zipchanger;
+
     private FolderSubtitles folderSubtitles;
 
     @Before
     public void setUp() throws IOException, ParserConfigurationException, SAXException {
         MockitoAnnotations.initMocks(this);
-        folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher, httpDownloader);
+        folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, subtitleSearcher, httpDownloader, zipchanger);
         when(consoleInputOutput.getInputFromUser()).thenReturn("file location");
-        when(openSubtitleHasher.computeHash("file location")).thenReturn("computed hash");
         when(subtitleSearcher.search("file location", "computed hash")).thenReturn("target url");
     }
 
@@ -77,5 +77,12 @@ public class FolderSubtitlesTest {
         folderSubtitles.start();
 
         verify(httpDownloader).download(anyString(), anyString());
+    }
+
+    @Test
+    public void zipFileShouldBeExtractedToSrt() throws ParserConfigurationException, SAXException, IOException {
+        folderSubtitles.start();
+
+        verify(zipchanger).extractZipToSrt(anyString());
     }
 }

@@ -9,8 +9,8 @@ import java.net.URL;
 public class HttpDownloader {
     private static final int BUFFER_SIZE = 4096;
 
-    public void download(String fileUrl, String destination) throws IOException {
-        destination += "compressed file";
+    public String download(String fileUrl, String destination) throws IOException {
+        destination = changeExtensionToZip(destination);
         URL url = new URL(fileUrl);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         InputStream inputStream = httpURLConnection.getInputStream();
@@ -22,5 +22,11 @@ public class HttpDownloader {
         }
         inputStream.close();
         fileOutputStream.close();
+        return  destination;
+    }
+
+    private String changeExtensionToZip(String destination) {
+        destination = destination.substring(0, destination.length() - 3) + "zip";
+        return destination;
     }
 }

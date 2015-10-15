@@ -9,20 +9,20 @@ public class FolderSubtitles {
     private User user;
     private TokenParser tokenParser;
     private ConsoleInputOutput consoleInputOutput;
-    private OpenSubtitleHasher openSubtitleHasher;
     private SubtitleSearcher subtitleSearcher;
     private HttpDownloader httpDownloader;
+    private ZipChanger zipchanger;
 
 
-    public FolderSubtitles(RequestConstructor requestConstructor, Requester requester, User user, TokenParser tokenParser, ConsoleInputOutput consoleInputOutput, OpenSubtitleHasher openSubtitleHasher, SubtitleSearcher subtitleSearcher, HttpDownloader httpDownloader) {
+    public FolderSubtitles(RequestConstructor requestConstructor, Requester requester, User user, TokenParser tokenParser, ConsoleInputOutput consoleInputOutput, SubtitleSearcher subtitleSearcher, HttpDownloader httpDownloader, ZipChanger zipchanger) {
         this.requestConstructor = requestConstructor;
         this.requester = requester;
         this.user = user;
         this.tokenParser = tokenParser;
         this.consoleInputOutput = consoleInputOutput;
-        this.openSubtitleHasher = openSubtitleHasher;
         this.subtitleSearcher = subtitleSearcher;
         this.httpDownloader = httpDownloader;
+        this.zipchanger = zipchanger;
     }
 
     public void start() throws IOException, ParserConfigurationException, SAXException {
@@ -30,7 +30,7 @@ public class FolderSubtitles {
         consoleInputOutput.printMessage(Messages.FILE_LOCATION_PROMPT);
         String fileLocation = consoleInputOutput.getInputFromUser();
         String downloadLink = subtitleSearcher.search(fileLocation, loginToken);
-        httpDownloader.download(downloadLink, fileLocation);
-
+        String zipFileLocation = httpDownloader.download(downloadLink, fileLocation);
+        zipchanger.extractZipToSrt(zipFileLocation);
     }
 }
