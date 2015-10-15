@@ -5,17 +5,17 @@ import java.io.IOException;
 
 public class EntryPoint {
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
-        ConsoleInputOutput consoleInputOutput = new ConsoleInputOutput();
         RequestConstructor requestConstructor = new RequestConstructor();
         HttpGatewayApi httpGatewayApi = new HttpGatewayApi();
-        Requester requester = new Requester(httpGatewayApi);
-        User user = new User(consoleInputOutput);
-        TokenParser tokenParser = new TokenParser();
+        RequestGateway requestGateway = new RequestGateway(httpGatewayApi);
+        ResponseParser responseParser = new ResponseParser();
+        Login login = new Login(requestConstructor, requestGateway, responseParser);
         OpenSubtitleHasher openSubtitleHasher = new OpenSubtitleHasher();
-        SubtitleSearcher subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requester, tokenParser);
+        SubtitleSearcher subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requestGateway, responseParser);
         HttpDownloader httpDownloader = new HttpDownloader();
         ZipChanger zipchanger = new ZipChanger();
-        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, subtitleSearcher, httpDownloader, zipchanger);
+        FileSubtitle fileSubtitle = new FileSubtitle(subtitleSearcher, httpDownloader, zipchanger);
+        FolderSubtitles folderSubtitles = new FolderSubtitles(login, fileSubtitle);
         folderSubtitles.start();
     }
 }

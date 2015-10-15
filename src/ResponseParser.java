@@ -5,7 +5,7 @@ import org.xml.sax.SAXException;
 
 import java.io.*;
 
-public class TokenParser {
+public class ResponseParser {
     public String parseLoginTokenResponse(String response) throws ParserConfigurationException, IOException, SAXException {
         Document document = parseResponseToDocument(response);
         NodeList nodes =  document.getElementsByTagName("string");

@@ -8,21 +8,21 @@ import java.io.IOException;
 
 import static org.mockito.Matchers.any;
 
-public class RequesterTest {
+public class RequestGatewayTest {
     @Mock
     HttpGatewayApi httpGatewayApi;
 
-    private Requester requester;
+    private RequestGateway requestGateway;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        requester = new Requester(httpGatewayApi);
+        requestGateway = new RequestGateway(httpGatewayApi);
     }
 
     @Test
     public void connectionShouldBeEstablishedWithTheServer() throws IOException {
-        requester.request("hello");
+        requestGateway.request("hello");
 
         Mockito.verify(httpGatewayApi).startConnection("http://api.opensubtitles.org/xml-rpc");
     }

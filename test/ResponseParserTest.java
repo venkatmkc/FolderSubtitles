@@ -11,10 +11,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by venkatmk on 13/10/15.
  */
-public class TokenParserTest {
+public class ResponseParserTest {
     @Test
     public void tokenResponseShouldBeParsedToToken() throws IOException, SAXException, ParserConfigurationException {
-        TokenParser tokenParser = new TokenParser();
+        ResponseParser responseParser = new ResponseParser();
         String response = "null<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                 "<methodResponse>\n" +
                 "<params>\n" +
@@ -45,14 +45,14 @@ public class TokenParserTest {
                 "</params>\n" +
                 "</methodResponse>";
 
-        String loginToken = tokenParser.parseLoginTokenResponse(response);
+        String loginToken = responseParser.parseLoginTokenResponse(response);
 
         assertThat(loginToken, is(equalTo("ijrjtrcf7qof0u168t0pii0bg6")));
     }
 
     @Test
     public void searchResponseShouldBeParsedToDownloadLink() throws ParserConfigurationException, SAXException, IOException {
-        TokenParser tokenParser = new TokenParser();
+        ResponseParser responseParser = new ResponseParser();
         String response = "null<methodResponse>\n" +
                 " <params>\n" +
                 "  <param>\n" +
@@ -205,7 +205,7 @@ public class TokenParserTest {
                 " </params>\n" +
                 "</methodResponse>";
 
-        String downloadLink = tokenParser.parseSearchResponse(response);
+        String downloadLink = responseParser.parseSearchResponse(response);
 
         assertThat(downloadLink, is(equalTo("http://www.opensubtitles.org/en/download/file/1951854837.gz")));
     }

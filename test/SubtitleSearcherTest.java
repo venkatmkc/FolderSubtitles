@@ -24,20 +24,20 @@ public class SubtitleSearcherTest {
     RequestConstructor requestConstructor;
 
     @Mock
-    Requester requester;
+    RequestGateway requestGateway;
 
     @Mock
-    TokenParser tokenParser;
+    ResponseParser responseParser;
 
     private SubtitleSearcher subtitleSearcher;
 
     @Before
     public void setUp() throws ParserConfigurationException, SAXException, IOException {
         MockitoAnnotations.initMocks(this);
-        subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requester, tokenParser);
+        subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requestGateway, responseParser);
         when(requestConstructor.searchRequestMessage(anyString(), anyString(), anyLong())).thenReturn("xmlrequest");
-        when(requester.request("xmlrequest")).thenReturn("response");
-        when(tokenParser.parseSearchResponse("response")).thenReturn("link");
+        when(requestGateway.request("xmlrequest")).thenReturn("response");
+        when(responseParser.parseSearchResponse("response")).thenReturn("link");
     }
 
     @Test
@@ -73,7 +73,7 @@ public class SubtitleSearcherTest {
         String loginToken = "request";
         subtitleSearcher.search(fileLocation, loginToken);
 
-        verify(requester).request("xmlrequest");
+        verify(requestGateway).request("xmlrequest");
     }
 
     @Test

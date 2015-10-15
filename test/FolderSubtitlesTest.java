@@ -1,88 +1,42 @@
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 
 public class FolderSubtitlesTest {
     @Mock
-    RequestConstructor requestConstructor;
+    Login login;
 
     @Mock
-    User user;
-
-    @Mock
-    Requester requester;
-
-    @Mock
-    TokenParser tokenParser;
-
-    @Mock
-    ConsoleInputOutput consoleInputOutput;
-
-
-    @Mock
-    SubtitleSearcher subtitleSearcher;
-
-    @Mock
-    HttpDownloader httpDownloader;
-
-    @Mock
-    ZipChanger zipchanger;
+    FileSubtitle fileSubtitle;
 
     private FolderSubtitles folderSubtitles;
-
     @Before
-    public void setUp() throws IOException, ParserConfigurationException, SAXException {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
-        folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, subtitleSearcher, httpDownloader, zipchanger);
-        when(consoleInputOutput.getInputFromUser()).thenReturn("file location");
-        when(subtitleSearcher.search("file location", "computed hash")).thenReturn("target url");
+        folderSubtitles = new FolderSubtitles(login, fileSubtitle);
     }
 
     @Test
     public void userShouldBeAbleToLogin() throws IOException, ParserConfigurationException, SAXException {
         folderSubtitles.start();
 
-        verify(user).login(requestConstructor, requester, tokenParser);
+        verify(login).loginToken();
     }
 
     @Test
-    public void shouldGetFileLocationFromUser() throws ParserConfigurationException, SAXException, IOException {
+    public void subtitleShouldBeDownloadedForFile() throws ParserConfigurationException, SAXException, IOException {
         folderSubtitles.start();
 
-        verify(consoleInputOutput).printMessage(Messages.FILE_LOCATION_PROMPT);
+        verify(fileSubtitle).downloadSubtitle(anyString(), anyString());
     }
 
-    @Test
-    public void fileLocationShouldBeObtainedFromTheUser() throws ParserConfigurationException, SAXException, IOException {
-        folderSubtitles.start();
-
-        verify(consoleInputOutput).getInputFromUser();
-    }
-
-    @Test
-    public void searchShouldBePerformedForTheFile() throws ParserConfigurationException, SAXException, IOException {
-        folderSubtitles.start();
-
-        verify(subtitleSearcher).search(anyString(), anyString());
-    }
-
-    @Test
-    public void subtitleShouldBeDownloaded() throws ParserConfigurationException, SAXException, IOException {
-        folderSubtitles.start();
-
-        verify(httpDownloader).download(anyString(), anyString());
-    }
-
-    @Test
-    public void zipFileShouldBeExtractedToSrt() throws ParserConfigurationException, SAXException, IOException {
-        folderSubtitles.start();
-
-        verify(zipchanger).extractZipToSrt(anyString());
-    }
 }

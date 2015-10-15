@@ -1,11 +1,11 @@
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-public class Requester {
+public class RequestGateway {
     private HttpGatewayApi httpGatewayApi;
     private final String openOrgServerUrl = "http://api.opensubtitles.org/xml-rpc";
 
-    public Requester(HttpGatewayApi httpGatewayApi) {
+    public RequestGateway(HttpGatewayApi httpGatewayApi) {
         this.httpGatewayApi = httpGatewayApi;
     }
 
