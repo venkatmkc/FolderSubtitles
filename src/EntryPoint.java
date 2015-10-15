@@ -13,7 +13,8 @@ public class EntryPoint {
         TokenParser tokenParser = new TokenParser();
         OpenSubtitleHasher openSubtitleHasher = new OpenSubtitleHasher();
         SubtitleSearcher subtitleSearcher = new SubtitleSearcher(openSubtitleHasher, requestConstructor, requester, tokenParser);
-        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher);
+        HttpDownloader httpDownloader = new HttpDownloader();
+        FolderSubtitles folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher, httpDownloader);
         folderSubtitles.start();
     }
 }

@@ -11,9 +11,10 @@ public class FolderSubtitles {
     private ConsoleInputOutput consoleInputOutput;
     private OpenSubtitleHasher openSubtitleHasher;
     private SubtitleSearcher subtitleSearcher;
+    private HttpDownloader httpDownloader;
 
 
-    public FolderSubtitles(RequestConstructor requestConstructor, Requester requester, User user, TokenParser tokenParser, ConsoleInputOutput consoleInputOutput, OpenSubtitleHasher openSubtitleHasher, SubtitleSearcher subtitleSearcher) {
+    public FolderSubtitles(RequestConstructor requestConstructor, Requester requester, User user, TokenParser tokenParser, ConsoleInputOutput consoleInputOutput, OpenSubtitleHasher openSubtitleHasher, SubtitleSearcher subtitleSearcher, HttpDownloader httpDownloader) {
         this.requestConstructor = requestConstructor;
         this.requester = requester;
         this.user = user;
@@ -21,12 +22,15 @@ public class FolderSubtitles {
         this.consoleInputOutput = consoleInputOutput;
         this.openSubtitleHasher = openSubtitleHasher;
         this.subtitleSearcher = subtitleSearcher;
+        this.httpDownloader = httpDownloader;
     }
 
     public void start() throws IOException, ParserConfigurationException, SAXException {
         String loginToken = user.login(requestConstructor, requester, tokenParser);
         consoleInputOutput.printMessage(Messages.FILE_LOCATION_PROMPT);
         String fileLocation = consoleInputOutput.getInputFromUser();
-        System.out.println(subtitleSearcher.search(fileLocation, loginToken));
+        String downloadLink = subtitleSearcher.search(fileLocation, loginToken);
+        httpDownloader.download(downloadLink, fileLocation);
+
     }
 }

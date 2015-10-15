@@ -30,14 +30,18 @@ public class FolderSubtitlesTest {
     @Mock
     SubtitleSearcher subtitleSearcher;
 
+    @Mock
+    HttpDownloader httpDownloader;
+
     private FolderSubtitles folderSubtitles;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, ParserConfigurationException, SAXException {
         MockitoAnnotations.initMocks(this);
-        folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher);
+        folderSubtitles = new FolderSubtitles(requestConstructor, requester, user, tokenParser, consoleInputOutput, openSubtitleHasher, subtitleSearcher, httpDownloader);
         when(consoleInputOutput.getInputFromUser()).thenReturn("file location");
         when(openSubtitleHasher.computeHash("file location")).thenReturn("computed hash");
+        when(subtitleSearcher.search("file location", "computed hash")).thenReturn("target url");
     }
 
     @Test
@@ -66,5 +70,12 @@ public class FolderSubtitlesTest {
         folderSubtitles.start();
 
         verify(subtitleSearcher).search(anyString(), anyString());
+    }
+
+    @Test
+    public void subtitleShouldBeDownloaded() throws ParserConfigurationException, SAXException, IOException {
+        folderSubtitles.start();
+
+        verify(httpDownloader).download(anyString(), anyString());
     }
 }
