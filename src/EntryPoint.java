@@ -15,7 +15,8 @@ public class EntryPoint {
         HttpDownloader httpDownloader = new HttpDownloader();
         ZipChanger zipchanger = new ZipChanger();
         FileSubtitle fileSubtitle = new FileSubtitle(subtitleSearcher, httpDownloader, zipchanger);
-        FolderSubtitles folderSubtitles = new FolderSubtitles(login, fileSubtitle);
+        VideoFinder videoFinder = new VideoFinder(new String[]{"avi", "mkv"});
+        FolderSubtitles folderSubtitles = new FolderSubtitles(login, fileSubtitle, "/Users/venkatmk/old mac/Arv hd/", videoFinder);
         folderSubtitles.start();
     }
 }
